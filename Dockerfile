@@ -1,15 +1,9 @@
 FROM python:3
 
-RUN git clone https://github.com/facebookresearch/fastText.git /tmp/fastText  && \
-  cd /tmp/fastText && \
-  pip install . && \
-  rm -rf /tmp/fastText && \
-  cd / 
-
 COPY requirements.txt /
 COPY gunicorn.conf /
-RUN pip install gunicorn
-RUN pip install -r requirements.txt
+RUN pip install gunicorn --no-cache-dir
+RUN pip install -r requirements.txt --no-cache-dir
 
 RUN  mkdir -p models
 

@@ -1,6 +1,6 @@
 from aiohttp import web
 import multiprocessing
-import fastText
+import fasttext
 
 model = None
 
