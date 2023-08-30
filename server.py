@@ -6,7 +6,7 @@ model = None
 
 def loadModel():
     global model
-    model = fastText.load_model("./models/lid.176.bin")
+    model = fasttext.load_model("./models/lid.176.bin")
     
 async def about(request):
     text = "Server: Gunicorn. CPU count: " + str(multiprocessing.cpu_count())
