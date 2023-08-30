@@ -2,7 +2,6 @@ FROM python:3
 
 COPY requirements.txt /
 COPY gunicorn.conf /
-RUN pip install gunicorn --no-cache-dir
 RUN pip install -r requirements.txt --no-cache-dir
 
 RUN  mkdir -p models
