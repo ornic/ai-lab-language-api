@@ -14,7 +14,7 @@ RUN pip install -r requirements.txt
 RUN  mkdir -p models
 
 #COPY /models/lid.176.bin /models/lid.176.bin
-ADD https://s3-us-west-1.amazonaws.com/fasttext-vectors/supervised_models/lid.176.bin /models/lid.176.bin
+ADD https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin /models/lid.176.bin
 
 
 COPY server.py /
