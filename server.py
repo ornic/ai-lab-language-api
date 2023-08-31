@@ -1,6 +1,8 @@
 from aiohttp import web
 import multiprocessing
 import fasttext
+import json
+import jsonpickle
 
 model = None
 
@@ -25,9 +27,11 @@ async def post_language(request):
         text = data['text']
         output = model.predict(text,1)
         language = output[0][0].replace('__label__','')
-        res = {"language": language}
-    except:
-        res = {"language": "na"}
+        res = {"language": language, "original_response": jsonpickle.encode(output)}
+    except Exception as e:
+        print("Exception!")
+        print(e)
+        res = {"language": "n/a", "error": json.dumps(e.__dict__, ensure_ascii=False)}
     return web.json_response(res)
 
 
