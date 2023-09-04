@@ -1,4 +1,4 @@
-jsonpickle
+gcld3==3.0.13
 gunicorn==21.0.1
 aiohttp==3.8.5
-fasttext @ git+https://github.com/facebookresearch/fastText@master
+fasttext @ git+https://github.com/facebookresearch/fastText@166ce2c71a497ff81cb62ec151be5b569e1f1be6
