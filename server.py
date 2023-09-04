@@ -15,6 +15,7 @@ def isModelLoaded():
 def loadModel():
     global model
     model = fasttext.load_model("./models/lid.176.bin")
+    global detector
     detector = gcld3.NNetLanguageIdentifier(min_num_bytes=0, max_num_bytes=1000)
 
 
