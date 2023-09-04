@@ -1,4 +1,7 @@
-FROM python:3
+FROM python:3-slim
+
+RUN apt-get update \
+    && apt-get -y install git build-essential libprotobuf-dev protobuf-compiler
 
 COPY requirements.txt /
 COPY gunicorn.conf /
