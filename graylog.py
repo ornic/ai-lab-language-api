@@ -18,10 +18,13 @@ def make_extra(payload: str):
         };
 
 
-def netlog_error(message: str, payload: str):
+def netlog_error(message: str, need_trace: bool):
     try:
-        logger.exception(message)
-        graylog_logger.critical(message, extra=make_extra(payload))
+        if need_trace:
+            logger.exception(message)
+        else:
+            logger.error(message)
+        graylog_logger.critical(message)
     except Exception as e:
         print(e)
 

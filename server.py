@@ -5,6 +5,7 @@ import json
 import gcld3
 import pycld2 as cld2
 from graylog import netlog_info, netlog_error
+from errors import LanguageDetectError
 
 
 model = None
@@ -72,7 +73,7 @@ async def post_language(request):
             variants.add(details[0][1])
 
         if len(variants) > 1:
-            raise ValueError(
+            raise LanguageDetectError(
                 "Fasttext language detected: "
                 + language
                 + ", but cld3 found: "
@@ -86,7 +87,7 @@ async def post_language(request):
             "Detected language for text [" + text + "] is [" + language + "]", ""
         )
     except Exception as e:
-        netlog_error(str(e), "")
+        netlog_error(str(e), type(e).__name__ != LanguageDetectError.__name__)
         res = {"language": "n/a", "error": str(e)}
     return web.json_response(res)
 
