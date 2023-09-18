@@ -13,6 +13,6 @@ RUN  mkdir -p models
 ADD https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin /models/lid.176.bin
 
 
-COPY server.py /
+COPY *.py /
 
 CMD [ "gunicorn", "-c", "gunicorn.conf", "server:app" ]

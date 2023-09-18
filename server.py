@@ -3,6 +3,9 @@ import multiprocessing
 import fasttext
 import json
 import gcld3
+import pycld2 as cld2
+from graylog import netlog_info, netlog_error
+
 
 model = None
 detector = None
@@ -61,19 +64,30 @@ async def post_language(request):
         result = detector.FindLanguage(text=text)
         print("CLD3 result: [" + result.language + "]", flush=True)
 
-        if result.language != language:
+        isReliable, textBytesFound, details = cld2.detect(text)
+        print("CLD2 result: [" + details[0][1] + "]", flush=True)
+
+        variants = {language, result.language}
+        if isReliable:
+            variants.add(details[0][1])
+
+        if len(variants) > 1:
             raise ValueError(
                 "Fasttext language detected: "
                 + language
                 + ", but cld3 found: "
                 + result.language
+                + ", and cld2 answered: "
+                + details[0][1]
             )
 
         res = {"language": language}
+        netlog_info(
+            "Detected language for text [" + text + "] is [" + language + "]", ""
+        )
     except Exception as e:
-        print("Error:", flush=True)
-        print(e, flush=True)
-        res = {"language": "n/a", "error": json.dumps(e.__dict__)}
+        netlog_error(str(e), "")
+        res = {"language": "n/a", "error": str(e)}
     return web.json_response(res)
 
 
