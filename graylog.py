@@ -1,21 +1,31 @@
 import logging
 import graypy
+import os
 from loguru import logger
 
-handler = graypy.GELFHTTPHandler(
-    "graylog-input.corp.tiburon-research.ru", 12201)
 
-graylog_logger = logging.getLogger('python_logger')
-graylog_logger.setLevel(logging.DEBUG)
+PYTHON_ENVIRONMENT_NAME = "PYTHON_ENVIRONMENT"
+
+
+class AddtitionalFieldsFilter(logging.Filter):
+    def __init__(self):
+        # In an actual use case would dynamically get this
+        # (e.g. from memcache)
+        self.environment = os.environ[PYTHON_ENVIRONMENT_NAME]
+
+    def filter(self, record):
+        record.environment = os.environ[PYTHON_ENVIRONMENT_NAME]
+        return PYTHON_ENVIRONMENT_NAME in os.environ
+
+
+graylog_logger = logging.getLogger("language_detector_logger")
+handler = graypy.GELFHTTPHandler("graylog-input.corp.tiburon-research.ru", 12201)
 graylog_logger.addHandler(handler)
+graylog_logger.addFilter(AddtitionalFieldsFilter())
 
 
 def make_extra(payload: str):
-    return {
-            "solution": "FastunaAI",
-            "source": "Language.Detection",
-            "payload": payload
-        };
+    return {"solution": "FastunaAI", "source": "Language.Detection", "payload": payload}
 
 
 def netlog_error(message: str, need_trace: bool):
